@@ -33,3 +33,20 @@ body { margin: 0; background: #f6f8fb; color: #1f2937; }
 .link { border: none; background: none; color: var(--brand); cursor: pointer; padding: 0; }
 .page-foot { display: flex; justify-content: space-between; margin-top: 8px; font-size: 12px; color: var(--muted); }
 .error-text { color: #b42318; }
+.panel { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; margin-bottom: 14px; }
+.panel .data-table { border: none; }
+.panel-title { margin: 0 0 8px; font-size: 14px; }
+.panel-desc { margin: 0 0 10px; font-size: 12px; color: var(--muted); }
+.filter-item select, .filter-item input { padding: 5px 8px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; }
+.notice-bar { background: #fff8e6; border: 1px solid #f2d38a; border-radius: 6px; padding: 8px 10px; font-size: 13px; color: #8a5a00; }
+.gap-list { margin: 0 0 10px; padding: 0 0 0 18px; font-size: 13px; color: #8a5a00; }
+.assess-card { border: 1px solid var(--border); border-left: 4px solid var(--brand); border-radius: 6px; padding: 8px 12px; margin-bottom: 10px; font-size: 13px; }
+.assess-card p { margin: 4px 0 0; }
+.assess-card[data-conclusion="离层加速"] { border-left-color: #b42318; }
+.assess-card[data-conclusion="数据中断"] { border-left-color: #d97706; }
+.assess-suggestion { color: var(--muted); }
+.tag { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 12px; background: #eef2f7; color: var(--muted); }
+.tag[data-status="待回填"], .tag[data-status="数据中断"] { background: #fef3c7; color: #92400e; }
+.tag[data-status="已回填"], .tag[data-status="无连续超限"] { background: #dcfce7; color: #166534; }
+.tag[data-status="离层加速"] { background: #fee2e2; color: #b42318; }
+.tag[data-status="持续超限"] { background: #ffedd5; color: #9a3412; }
