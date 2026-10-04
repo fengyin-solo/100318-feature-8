@@ -3,6 +3,50 @@ from __future__ import annotations
 
 from typing import Any
 
+
+def _roof_readings() -> list[dict[str, Any]]:
+    """逐时离层量样例：覆盖断电缺测、真实离层加速、中断型超限三种典型形态。
+
+    离层量单位 mm；采集时刻按整点对齐。缺口用「没有记录」表达，而不是补零。
+    """
+    rows: list[dict[str, Any]] = []
+
+    def add(face: str, day: str, hour: int, value: float, *, backfill: bool = False) -> None:
+        rows.append({
+            "id": len(rows) + 1,
+            "工作面": face,
+            "采集时刻": f"{day}T{hour:02d}:00",
+            "离层量": value,
+            "补采": backfill,
+            "版本": 1,
+            "上报时间": f"{day}T{hour:02d}:05",
+        })
+
+    day = "2026-10-03"
+    # 1301综采工作面：04:00-06:00 井下断电缺测；07:00 为事后补采；12:00 起逐时抬升，连续超限（真离层加速）
+    profile_1301 = [38, 40, 41, 39, None, None, None, 52, 55, 58, 60, 62,
+                    105, 118, 132, 96, 88, 80, 74, 70, 66, 62, 58, 55]
+    for hour, value in enumerate(profile_1301):
+        if value is None:
+            continue
+        add("1301综采工作面", day, hour, float(value), backfill=(hour == 7))
+    # 1302回采工作面：08:00、09:00 超限后 10:00-12:00 通讯中断，13:00、14:00 又超限（数据中断型，连续性待核实）
+    profile_1302 = [35, 36, 38, 40, 42, 44, 46, 48, 102, 110, None, None,
+                    None, 115, 108, 70, 62, 58, 54, 50, 47, 45, 43, 41]
+    for hour, value in enumerate(profile_1302):
+        if value is None:
+            continue
+        add("1302回采工作面", day, hour, float(value))
+    # 1303掘进工作面：全天平稳，无缺口无超限
+    profile_1303 = [22, 24, 25, 26, 28, 30, 31, 33, 34, 36, 38, 40,
+                    41, 42, 43, 44, 42, 40, 38, 36, 34, 32, 30, 28]
+    for hour, value in enumerate(profile_1303):
+        add("1303掘进工作面", day, hour, float(value))
+    return rows
+
+
+ROOF_READINGS_SEED: list[dict[str, Any]] = _roof_readings()
+
 SEED_ROWS: dict[str, list[dict[str, Any]]] = {
     "minearea": [{'id': 1,
   'status': '正常生产',

@@ -28,6 +28,20 @@ class EntryPayload(BaseModel):
     remark: str | None = None
 
 
+class RoofReadingIn(BaseModel):
+    """一条离层量逐时上报：采集时刻会规整到整点，同一工作面同一小时只留最新一版。"""
+
+    工作面: str
+    采集时刻: str
+    离层量: float
+
+
+class RoofReadingsPayload(BaseModel):
+    """批量上报/补采离层量；任何一条不合法整批不写，问题逐条说明。"""
+
+    items: list[RoofReadingIn] = Field(default_factory=list)
+
+
 
 class MineareaEntry(BaseModel):
     """矿区明细结构。"""

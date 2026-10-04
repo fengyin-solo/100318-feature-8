@@ -6,7 +6,10 @@ from __future__ import annotations
 
 from typing import Any
 
-from app.seed import SEED_ROWS
+from app.seed import ROOF_READINGS_SEED, SEED_ROWS
+
+# 遥测明细表（逐时上报）不作为独立业务模块出现在运营概览里
+TELEMETRY_TABLES = {"roof_readings"}
 
 
 class Store:
@@ -14,9 +17,10 @@ class Store:
         self._tables: dict[str, list[dict[str, Any]]] = {
             name: [dict(row) for row in rows] for name, rows in SEED_ROWS.items()
         }
+        self._tables["roof_readings"] = [dict(row) for row in ROOF_READINGS_SEED]
 
     def module_names(self) -> list[str]:
-        return sorted(self._tables)
+        return sorted(name for name in self._tables if name not in TELEMETRY_TABLES)
 
     def rows(self, module: str) -> list[dict[str, Any]]:
         return self._tables.setdefault(module, [])
